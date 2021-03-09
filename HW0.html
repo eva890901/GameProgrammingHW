@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+#heading{
+	 position:absolute;
+	 text-align:center;
+	 width:100vw;
+}	
+</style> 
+</head>
+<body> 
+<div id = heading>
+  <button id='button'> Press </button>
+</div>
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script type = "module">
+
+
+import * as THREE from 'https://unpkg.com/three/build/three.module.js';
+import { OrbitControls } from 'https://unpkg.com/three/examples/jsm/controls/OrbitControls.js';
+import { MTLLoader } from 'https://unpkg.com/three/examples/jsm/loaders/MTLLoader.js';
+import { OBJLoader } from 'https://unpkg.com/three/examples/jsm/loaders/OBJLoader.js';
+
+$('#button').click(function(){
+ run = ! run;
+ 
+ if(run)
+	$('#button').text ('stop');
+ else
+    $('#button').text ('run');
+});
+
+
+var camera, scene, renderer;
+var Thomas;
+var angle = 0;
+var clock;
+var run;
+
+init();
+animate();
+
+function readModel (modelName, targetSize=40) {
+	var onProgress = function(xhr) {
+	if (xhr.lengthComputable) {
+		var percentComplete = xhr.loaded / xhr.total * 100;
+			console.log(Math.round(percentComplete, 2) + '% downloaded');
+		}
+	};
+
+	var onError = function(xhr) {};
+
+	var mtlLoader =  new MTLLoader();
+	mtlLoader.setPath('models/');
+	mtlLoader.load(modelName+'.mtl', function(materials) {
+		materials.preload();
+
+		var objLoader =  new OBJLoader();
+		objLoader.setMaterials(materials);
+		objLoader.setPath('models/');
+		objLoader.load(modelName+'.obj', function(object) {
+
+		let theObject =  unitize (object, targetSize);
+		//theObject.add(new THREE.BoxHelper(theObject));
+		theObject.name = 'OBJ'
+
+		Thomas = new THREE.Object3D();
+		Thomas.add(theObject);
+		Thomas.rotation.y = Math.PI/2;
+
+		scene.add (Thomas);
+
+		}, onProgress, onError);
+
+	});
+
+}
+
+function unitize (object, targetSize=40) {  
+
+	// find bounding box of 'object'
+	var box3 = new THREE.Box3();
+	box3.setFromObject (object);
+	var size = new THREE.Vector3();
+	size.subVectors (box3.max, box3.min);
+	var center = new THREE.Vector3();
+	center.addVectors(box3.max, box3.min).multiplyScalar (0.5);
+
+	console.log ('center: ' + center.x + ', '+center.y + ', '+center.z );
+	console.log ('size: ' + size.x + ', ' +  size.y + ', '+size.z );
+
+	// uniform scaling according to objSize
+	var objSize = Math.max (size.x, size.y, size.z);
+	var scaleSet = targetSize/objSize;
+
+	var theObject =  new THREE.Object3D();
+	theObject.add (object);
+	object.scale.set (scaleSet, scaleSet, scaleSet);
+	object.position.set (-center.x*scaleSet, center.y*scaleSet/6, -center.z*scaleSet);
+	return theObject;
+}
+
+
+
+function init() {
+	scene = new THREE.Scene();
+	clock = new THREE.Clock();
+
+	renderer = new THREE.WebGLRenderer();
+	renderer.setSize(window.innerWidth, window.innerHeight);
+	renderer.setClearColor(0x888888);
+	document.body.appendChild(renderer.domElement);
+
+	camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 1000);
+	camera.position.set (0, 400,400);
+	let controls = new OrbitControls(camera, renderer.domElement);
+
+	var gridXZ = new THREE.GridHelper(200, 20, 'red', 'white');
+	scene.add(gridXZ);
+	
+	let light = new THREE.PointLight(0xffffff);
+	light.position.set(100, 300, -100);
+	scene.add(light);
+	
+	var light2 = new THREE.AmbientLight(0x404040);
+	scene.add(light2);
+
+	readModel('Thomas');
+	Thomas = new THREE.Mesh(new THREE.BoxGeometry(10, 10, 30), new THREE.MeshNormalMaterial());
+	run = true;
+}
+
+
+
+function animate() {
+	var radius = 50;
+	var dt = clock.getDelta();
+	if(run){
+	if(status == 0)
+	{
+		Thomas.position.set(radius*Math.cos(angle) + 50, 10, -radius*Math.sin(angle));
+		Thomas.rotation.y = angle;
+
+		angle += 2*0.10472*dt;
+		if(Thomas.position.x < 50)
+		{
+		  status = 1;
+		}
+	}
+	else if(status == 1)
+	{
+		Thomas.position.x -= 2*0.10472;
+		if(Thomas.position.x < -50)
+		{
+			status = 2;
+		}
+	}
+	else if(status == 2)
+	{
+		Thomas.position.set(radius*Math.cos(angle) - 50, 10, -radius*Math.sin(angle));
+		Thomas.rotation.y = angle;
+
+		angle += 2*0.10472*dt;
+		if(Thomas.position.x > -50)
+		{
+			status = 3;
+		}
+	}
+	else if(status == 3)
+	{
+		Thomas.position.x += 2*0.10472;
+		if(Thomas.position.x > 50)
+		{
+			status = 0;
+		}
+	}
+  
+  }
+  
+	requestAnimationFrame(animate);
+	renderer.render(scene, camera);
+}
+
+</script>
+
+</body>
+</html>
