@@ -142,7 +142,7 @@ function animate() {
 		Thomas.position.set(radius*Math.cos(angle) + 50, 10, -radius*Math.sin(angle));
 		Thomas.rotation.y = angle;
 
-		angle += 2*0.10472*dt;
+		angle += 1.71*dt;
 		if(Thomas.position.x < 50)
 		{
 		  status = 1;
@@ -150,7 +150,7 @@ function animate() {
 	}
 	else if(status == 1)
 	{
-		Thomas.position.x -= 2*0.10472;
+		Thomas.position.x -= 5.7*0.10472;
 		if(Thomas.position.x < -50)
 		{
 			status = 2;
@@ -161,7 +161,7 @@ function animate() {
 		Thomas.position.set(radius*Math.cos(angle) - 50, 10, -radius*Math.sin(angle));
 		Thomas.rotation.y = angle;
 
-		angle += 2*0.10472*dt;
+		angle += 1.71*dt;
 		if(Thomas.position.x > -50)
 		{
 			status = 3;
@@ -169,7 +169,7 @@ function animate() {
 	}
 	else if(status == 3)
 	{
-		Thomas.position.x += 2*0.10472;
+		Thomas.position.x += 5.7*0.10472;
 		if(Thomas.position.x > 50)
 		{
 			status = 0;
