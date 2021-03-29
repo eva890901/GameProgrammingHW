@@ -44,10 +44,12 @@ class puck {
 		this.force = new THREE.Vector3(-5,0,0);
 		this.mesh = mesh;
 		scene.add (this.mesh);
+		
 		this.light = new THREE.PointLight( 0xffffff, 1);
 		this.light.position.set( 50, 50, 50 );
 		scene.add( this.light );
 		mesh.material.color = new THREE.Color().setHSL (Math.random(), 0.5, .7);
+		this.light.color.copy(mesh.material.color);
    }
    
 	update(dt) {
@@ -183,11 +185,8 @@ function animate() {
 			let test = Math.sqrt(Math.pow(pucks[i].pos.x - pucks[j].pos.x, 2) + Math.pow(pucks[i].pos.z - pucks[j].pos.z, 2)) ;
 			if(test<2*R){
 				pucks[i].vel.x = -pucks[i].vel.x;
-				collisionsound.play();
 				pucks[i].vel.z = -pucks[i].vel.z;
-				collisionsound.play();
 				pucks[j].vel.x = -pucks[j].vel.x;
-				collisionsound.play();
 				pucks[j].vel.z = -pucks[j].vel.z;
 				collisionsound.play();
 			}
