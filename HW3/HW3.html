@@ -167,14 +167,19 @@ function animate() {
 	let intKey;
 	switch (state) {
 		case 'Stand':
-			intKey = keyframeStand(walktime, TStand,ts);
+			intKey = keyframeStand(walktime, TStand, ts);
 			break;
 		case 'S2W':
-			intKey = keyframeS2W(walktime, TS2W,ts);
+			intKey = keyframeS2W(walktime, TS2W, ts);
+			if(intKey[2]) state = 'Walk';
 			break;
 		case 'Walk':
-			intKey = keyframeWalk(walktime, TWalk,ts);
+			intKey = keyframeWalk(walktime, TWalk, ts);
 			break;
+		case 'W2S':
+            intKey = keyframeW2S(walktime, TW2S, ts);
+			if(!intKey[2]) state = 'Stand';
+            break;
 	}
 	//intKey = keyframe(clock.getElapsedTime());
 	lLeg.rotation.x = intKey[0];
@@ -188,14 +193,14 @@ function animate() {
 		let dt = clock.getDelta();
 		let R = 50;
 		let omega = HH/R/T;  
-		theta += omega*75*dt;
+		theta += omega*200*dt;
 		var count = theta / (2*Math.PI);
 		if( count  % 2  < 1){
 			torso.position.set (R*Math.cos(theta)-50, HH, -R*Math.sin(theta));
 			torso.rotation.y = Math.PI + theta;
 		}
 		else {
-			theta += omega*dt*37.5;
+			theta += omega*dt*100;
 			torso.position.set (-R/2*Math.sin(theta + Math.PI/2)+25, HH, R/2*Math.cos(theta+ Math.PI/2));
 			torso.rotation.y = -(Math.PI + theta);
 		}
