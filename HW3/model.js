@@ -1,4 +1,4 @@
-function buildHead2(WW, HH, DD) {
+function buildHead2(WW, HH, DD,texture) {
 
 	var geometry = new THREE.BufferGeometry();	
 	var vertices = [];
@@ -62,7 +62,7 @@ function buildHead2(WW, HH, DD) {
 	return head;
 }
 
-function buildBody2(WW, HH, DD) {
+function buildBody2(WW, HH, DD,texture) {
  
 	var geometry = new THREE.BufferGeometry();	
 	var vertices = [];
@@ -130,7 +130,7 @@ function buildBody2(WW, HH, DD) {
 	return body;
 }
 
-function buildLLeg2(WW, HH, DD) {
+function buildLLeg2(WW, HH, DD,texture) {
  
 	var geometry = new THREE.BufferGeometry();	
 	var vertices = [];
@@ -196,7 +196,7 @@ function buildLLeg2(WW, HH, DD) {
 	mesh.position.y=-HH/2;
 	return Leg;
 }
-function buildLHand2(WW, HH, DD) {
+function buildLHand2(WW, HH, DD,texture) {
  
 	var geometry = new THREE.BufferGeometry();	
 	var vertices = [];
