@@ -124,9 +124,9 @@ function buildBody2(WW, HH, DD,texture) {
 	geometry.setIndex(indices);  
 	geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
 	geometry.setAttribute('uv', new THREE.Float32BufferAttribute(uvs, 2));	
-	//let torso = new THREE.Group();
+
 	let body = new THREE.Mesh (geometry, new THREE.MeshBasicMaterial({map: texture, side:THREE.DoubleSide}));
-	//torso.add (body);
+
 	return body;
 }
 
@@ -189,9 +189,9 @@ function buildLLeg2(WW, HH, DD,texture) {
 	geometry.setIndex(indices);  
 	geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
 	geometry.setAttribute('uv', new THREE.Float32BufferAttribute(uvs, 2));	
-
-	let mesh = new THREE.Mesh (geometry, new THREE.MeshBasicMaterial({map: texture, side:THREE.DoubleSide}));
 	Leg = new THREE.Group();
+	let mesh = new THREE.Mesh (geometry, new THREE.MeshBasicMaterial({map: texture, side:THREE.DoubleSide}));
+	
 	Leg.add(mesh);
 	mesh.position.y=-HH/2;
 	return Leg;
@@ -255,9 +255,9 @@ function buildLHand2(WW, HH, DD,texture) {
 	geometry.setIndex(indices);  
 	geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
 	geometry.setAttribute('uv', new THREE.Float32BufferAttribute(uvs, 2));	
-
-	let mesh = new THREE.Mesh (geometry, new THREE.MeshBasicMaterial({map: texture, side:THREE.DoubleSide}));
 	Hand = new THREE.Group();
+	let mesh = new THREE.Mesh (geometry, new THREE.MeshBasicMaterial({map: texture, side:THREE.DoubleSide}));
+	
 	Hand.add(mesh);
 	mesh.position.y=-HH/2;
 	
